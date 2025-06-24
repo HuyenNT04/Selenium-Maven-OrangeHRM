@@ -12,34 +12,38 @@ import actions.reportConfig.AllureReportListener;
 @Feature("Check demo Feature Report")
 public class GeneralInformation extends BaseTest { //use all funcs in BaseTest
     //Define
-    GeneralInforPageObject generalInforPage;
+    private static ThreadLocal<GeneralInforPageObject> generalInforPageThreadLocal = new ThreadLocal<>();
     String updatedName, phone, email, country;
 
-    @BeforeClass(alwaysRun = true)
+    @BeforeMethod(alwaysRun = true)
     @Description("Open Generate Information Page")
     public void beforeClass(ITestContext context){
-        driver = (WebDriver) context.getAttribute("WebDriver"); // get driver from Context
-        updatedName =  "Huyen Checked"+getRandomNumber();
-        phone = "0934653"+getRandomNumber();
-        email = "check"+getRandomNumber()+"@gmail.com";
-        country = "Antigua and Barbuda";
-        generalInforPage = new GeneralInforPageObject(driver);
-        generalInforPage.clickToAdminSection();
-        generalInforPage.clickToOrganization();
-        generalInforPage.clickToGenerateInformationOption();
+        WebDriver currentDriver = getDriver();
+        GeneralInforPageObject page = new GeneralInforPageObject(currentDriver);
+        page.clickToAdminSection();
+        page.clickToOrganization();
+        page.clickToGenerateInformationOption();
+        generalInforPageThreadLocal.set(page);
     }
     @Test
     @Step("Check UI")//mandtory for report
     public void GI_01_CheckUI(){
+        GeneralInforPageObject generalInforPage = generalInforPageThreadLocal.get();
         verifyTrue(generalInforPage.checkTitleDisplayed());
         verifyTrue(generalInforPage.checkEditToggleDisplayed());
         verifyTrue(generalInforPage.checkNumberOfEmployeeDisplayed());
-        //verifyEquals(generalInforPage.getSuccessMessage(),"Successfully Updated"); //- For testing failed
     }
     @Test
     @Step("Edit General Information")
     @Severity(SeverityLevel.TRIVIAL)
     public void GI_01_EditGeneralInformation() {
+        GeneralInforPageObject generalInforPage = generalInforPageThreadLocal.get();
+        //data
+        updatedName =  "Huyen Checked"+getRandomNumber();
+        phone = "0934653"+getRandomNumber();
+        email = "check"+getRandomNumber()+"@gmail.com";
+        country = "Antigua and Barbuda";
+        //Verify
         generalInforPage.clickToEditToggle();
         generalInforPage.enterOrganizationNameTextbox(updatedName);
         generalInforPage.enterPhoneTextbox(phone);

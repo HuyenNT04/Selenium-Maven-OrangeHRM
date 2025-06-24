@@ -33,13 +33,13 @@
             <version>${selenium.version}</version>
         </dependency>
 
-        <!-- TestNG: Framework kiểm thử đơn vị và tích hợp, hỗ trợ chạy test với XML -->
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>${testng.version}</version>
-            <scope>test</scope>
-        </dependency>
+<!--        &lt;!&ndash; TestNG: Framework kiểm thử đơn vị và tích hợp, hỗ trợ chạy test với XML &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.testng</groupId>-->
+<!--            <artifactId>testng</artifactId>-->
+<!--            <version>${testng.version}</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
 
         <!-- WebDriverManager: Quản lý driver (như ChromeDriver) tự động, không cần tải offline -->
         <dependency>
@@ -75,7 +75,7 @@
         <!--            <version>${poi.version}</version>-->
         <!--        </dependency>-->
 
-        <!-- TestNG (lặp lại, sửa scope về compile để dùng trong code chính nếu cần) -->
+        <!-- TestNG (sửa scope về compile để dùng trong code chính nếu cần, complie used for both main and test) -->
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
@@ -131,6 +131,18 @@
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
         </dependency>
+        <!--For testing database -->
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>9.2.0</version>
+        </dependency>
+        <!--REST Assured for API Testing -->
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>5.5.5</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -153,7 +165,8 @@
                 <version>3.2.5</version>
                 <configuration>
                     <suiteXmlFiles>
-                        <suiteXmlFile>src/test/resources/runAllTestcases.xml</suiteXmlFile>
+<!--                        <suiteXmlFile>src/test/resources/runAllTestcases.xml</suiteXmlFile>-->
+                            <suiteXmlFile>src/test/resources/runTestCICD.xml</suiteXmlFile>
                     </suiteXmlFiles>
                     <argLine>
                         -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
@@ -165,7 +178,7 @@
                 </configuration>
             </plugin>
 
-            <!-- Plugin Allure (nếu mày muốn tạo báo cáo Allure trên GitHub Actions) -->
+            <!-- Plugin Allure (nếu tạo báo cáo Allure trên GitHub Actions) -->
             <plugin>
                 <groupId>io.qameta.allure</groupId>
                 <artifactId>allure-maven</artifactId>

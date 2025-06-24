@@ -18,27 +18,22 @@ import org.testng.annotations.Test;
 @Epic("Check Company Structure")
 @Feature("Check Company Structure Features")
 public class Structure extends BaseTest {
-    StructurePageObject structurePage;
-    String unitName, des, unitId;
-
-    @BeforeClass(alwaysRun = true)
-    @Description("Open Admin section")
-    public void beforeClass(ITestContext context) {
-        driver = (WebDriver) context.getAttribute("WebDriver"); // Lấy driver từ Context
-        structurePage = new StructurePageObject(driver);
-        structurePage.clickToAdminSection();
-    }
-
+    private static ThreadLocal<StructurePageObject> structurePageObjectThreadLocal = new ThreadLocal<>();
     @BeforeMethod(alwaysRun = true)
-    @Description("Navigate to Structure Page")
-    public void beforeTestcases() {
-        structurePage.clickToOrganization();
-        structurePage.clickToStructureOption();
+    @Description("Open Structure Page")
+    public void beforeClass(ITestContext context) {
+        WebDriver currentDriver = getDriver();
+        StructurePageObject page = new StructurePageObject(currentDriver);
+        page.clickToAdminSection();
+        page.clickToOrganization();
+        page.clickToStructureOption();
+        structurePageObjectThreadLocal.set(page);
     }
 
     @Test
     @Step("Verify UI Elements on Organization Structure Page")
     public void CS_01_VerifyUI() {
+        StructurePageObject structurePage = structurePageObjectThreadLocal.get();
         verifyEquals(structurePage.getMainTitle(), "Organization Structure");
         verifyTrue(structurePage.isEditToggleDisplayed());
         verifyFalse(structurePage.isAddButtonDisplayed()); // Add button should be hidden before editing mode
@@ -47,10 +42,12 @@ public class Structure extends BaseTest {
     @Test
     @Step("Add a New Organization Unit")
     public void CS_02_AddNewUnit() {
+        StructurePageObject structurePage = structurePageObjectThreadLocal.get();
         structurePage.clickToEditToggle();
         structurePage.clickToAddBtn();
         verifyTrue(structurePage.isAddDialogDisplayed());
         //Create
+        String unitName, des, unitId;
         unitName = generateRandomName();
         des = generateRandomName();
         unitId = String.valueOf(getRandomNumber());
@@ -58,7 +55,7 @@ public class Structure extends BaseTest {
         structurePage.enterName(unitName);
         structurePage.enterDescription(des);
         structurePage.clickToSaveButton();
-
+        //Verify
         verifyEquals(structurePage.getMainTitle(), "Organization Structure");
         verifyEquals(structurePage.getMainSuccessMessage(), "Success");
         verifyEquals(structurePage.getSubSuccessMessage(), "Successfully Saved");
@@ -98,58 +95,58 @@ public class Structure extends BaseTest {
     @Test
     @Step("Delete an Organization Unit")
     public void CS_04_DeleteOrganizationUnit() {
+        StructurePageObject structurePage = structurePageObjectThreadLocal.get();
         structurePage.clickToEditToggle();
         structurePage.clickToAddBtn();
         verifyTrue(structurePage.isAddDialogDisplayed());
         //Create new
+        String unitName;
         unitName = generateRandomName();
         structurePage.enterName(unitName);
         structurePage.clickToSaveButton();
         verifyEquals(structurePage.getMainTitle(), "Organization Structure");
-
         //Delete
         structurePage.clickToDeleteIcon(unitName);
         structurePage.confirmDelete();
-
+        //Verify
         verifyEquals(structurePage.getMainSuccessMessage(), "Success");
         verifyEquals(structurePage.getSubSuccessMessage(), "Successfully Deleted");
-        verifyTrue(structurePage.isOrganizationUnitNotDisplayed(unitName));
+        verifyFalse(structurePage.isOrganizationUnitDisplayed(unitName));
     }
 
     @Test
     @Step("Add a Sub-Organization Unit Level 2")
     public void CS_05_AddSubOrganizationUnit() {
+        StructurePageObject structurePage = structurePageObjectThreadLocal.get();
         structurePage.clickToEditToggle();
         structurePage.clickToAddBtn();
         verifyTrue(structurePage.isAddDialogDisplayed());
         //Create new
+        String unitName;
         unitName = generateRandomName();
         structurePage.enterName(unitName);
         structurePage.clickToSaveButton();
         verifyEquals(structurePage.getMainTitle(), "Organization Structure");
-
         //Add sub
         structurePage.clickAddSubOrganizationIcon(unitName);
-        String subUnit = generateRandomName();
+        String subUnit = "Sub"+generateRandomName();
         structurePage.enterName(subUnit);
         structurePage.clickToSaveButton();
         //Verify
         verifyEquals(structurePage.getMainSuccessMessage(), "Success");
         verifyEquals(structurePage.getSubSuccessMessage(), "Successfully Saved");
-
         //Find and check
         structurePage.clickToExtendIcon(unitName);
         verifyTrue(structurePage.isOrganizationUnitDisplayed(subUnit));
-
     }
 
-    @Test(groups = "runnow")
+    @Test
     @Step("Verify Validations on Add Organization Unit Form")
     public void CS_06_VerifyAddUnitValidations() {
+        StructurePageObject structurePage = structurePageObjectThreadLocal.get();
         structurePage.clickToEditToggle();
         structurePage.clickToAddBtn();
         verifyTrue(structurePage.isAddDialogDisplayed());
-
         //Check validation
         structurePage.clickToSaveButton(); // Try to save without entering data
         verifyTrue(structurePage.isRequiredFieldErrorDisplayed("Name"));
