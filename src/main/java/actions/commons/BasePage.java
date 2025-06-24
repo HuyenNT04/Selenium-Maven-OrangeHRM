@@ -94,13 +94,23 @@ public class BasePage {
         return By.xpath(locator);
     }
     private WebElement getWebElement(WebDriver driver, String locator){ //only use for some funcs in this class -> private
-        return  driver.findElement(getByXpath(locator));
+        return driver.findElement(getByXpath(locator));
     }
     public List<WebElement> getListWebElements(WebDriver driver, String locator){
         return driver.findElements(getByXpath(locator));
     }
     public void clickToElement(WebDriver driver, String locator){
-        getWebElement(driver, locator).click();
+        int attempts = 0;
+        while (attempts<3) {
+            try {
+                getWebElement(driver, locator).click();
+                return; // Click thành công, thoát khỏi hàm
+            } catch (StaleElementReferenceException e) {
+                System.out.println("Gặp StaleElementReferenceException, thử lại lần " + (attempts + 1));
+            }
+            attempts++;
+        }
+        //getWebElement(driver, locator).click();
     }
     public void sendkeyToElement(WebDriver driver, String locator, String valueToSend) {
         clearValueInField(driver, locator);
@@ -297,6 +307,8 @@ public class BasePage {
     public boolean waitForElementSelected(WebDriver driver, String locator){
         return new WebDriverWait(driver, Duration.ofSeconds(LONG_TIMEOUT)).until(ExpectedConditions.elementToBeSelected(getByXpath(locator)));
     }
+
+    //Hard code
     public void sleepInSeconds(long timeInSeconds){ //hard wait
         try {
             Thread.sleep(timeInSeconds);

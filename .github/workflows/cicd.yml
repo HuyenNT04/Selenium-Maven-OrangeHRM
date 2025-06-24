@@ -33,6 +33,11 @@ jobs:
         with:
           maven-version: 3.9.9
 
+      - name: Clean old Allure results
+        run: |
+          rm -rf allure-results
+          rm -rf target/site/allure-maven-plugin
+
       - name: Run TestNG Tests with Maven
         run: mvn clean test -Dsurefire.useFile=false --batch-mode # Chạy test bằng Maven, log hiển thị rõ hơn
       # Sử dụng `mvn clean test` thay vì `mvn clean install` để chỉ chạy test mà không đóng gói JAR,

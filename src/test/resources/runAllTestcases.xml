@@ -1,6 +1,6 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 
-<suite name="OrangeHRM Project" verbose="1" parallel="methods" thread-count="1">
+<suite name="OrangeHRM Project" verbose="1" parallel="false">
     <listeners>
         <listener class-name="actions.reportConfig.AllureReportListener"/>
     </listeners>
@@ -12,13 +12,19 @@
 <!--                <include name="runnow"/>-->
 <!--            </run>-->
 <!--        </groups>-->
-<!--        <classes>-->
+        <classes>
+<!--            <class name="testcases.admin.qualification.Language"></class>-->
 <!--            <class name="testcases.admin.organization.GeneralInformation"></class>-->
-<!--        </classes>-->
-        <packages>
-            <package name="testcases.admin.organization"></package>
-            <package name="testcases.admin.job"></package>
-        </packages>
+<!--            <class name="testcases.admin.organization.Locations"></class>-->
+<!--            <class name="testcases.admin.organization.Structure"></class>-->
+            <class name="testcases.admin.job.JobTitles"></class>
+            <!--            <class name="testcases.PIM.AddEmployee"></class>-->
+        </classes>
+<!--        <packages>-->
+<!--            <package name="testcases.admin.organization"></package>-->
+<!--&lt;!&ndash;            <package name="testcases.admin.job"></package>&ndash;&gt;-->
+<!--&lt;!&ndash;            <package name="testcases.admin.qualification"></package>&ndash;&gt;-->
+<!--        </packages>-->
     </test>
 <!--    <test name="Run on Edge browser">-->
 <!--        <parameter name="browser" value="Edge"></parameter>-->

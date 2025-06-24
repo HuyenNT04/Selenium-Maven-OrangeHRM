@@ -7,6 +7,7 @@ public class GlobalConstants {
     //url/
     //folder
     public static final String URL = "https://opensource-demo.orangehrmlive.com/web/index.php";
+    public static final String URL_TEST = "http://localhost/orangehrm/web/index.php";
     public static final long SHORT_TIMEOUT = 5;
     public static final long LONG_TIMEOUT = 30;
     public static final String RELATIVE_PROJECT_PATH = System.getProperty("user.dir");
