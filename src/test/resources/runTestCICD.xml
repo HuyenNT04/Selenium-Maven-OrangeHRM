@@ -7,7 +7,7 @@
     <test name="Run Flow CICD">
         <parameter name="browser" value="Chrome"></parameter>
         <parameter name="headless" value="true"/>
-        <parameter name="isCICD" value="true"/>
+        <parameter name="isCICD" value="false"/>
 <!--        <groups>-->
 <!--            <run>-->
 <!--                <include name="runnow"></include>-->
