@@ -38,12 +38,12 @@ public class BaseTest extends BasePage{
 
     @BeforeMethod(alwaysRun = true)
     @Parameters({"browser", "headless", "isCICD"})
-    public void setUp(String browserName, @Optional("false") boolean headless,@Optional("false") String isCICD, ITestContext context) throws SQLException {
+    public void setUp(String browserName, @Optional("false") boolean headless,@Optional("false") Boolean isCICD, ITestContext context) throws SQLException {
 //        try {
 //            connection = DBConnection.getConnection();
 //            dbUtils = new DBUtils(connection); // Khởi tạo DBUtils với kết nối hiện tại
-            boolean isCI = Boolean.parseBoolean(isCICD); //do o file xml gia tri truyen vao dang la string, nen phai parse qua Boolean
-            WebDriver driver = openBrowser(browserName, headless, isCI);
+            //boolean isCI = Boolean.parseBoolean(isCICD); //do o file xml gia tri truyen vao dang la string, nen phai parse qua Boolean
+            WebDriver driver = openBrowser(browserName, headless, isCICD);
             driverThreadLocal.set(driver);
             context.setAttribute("WebDriver", driver); // save Driver into Context to report
 //        } catch (SQLException e) {
@@ -73,7 +73,7 @@ public class BaseTest extends BasePage{
             options.addArguments("--ignore-certificate-errors");
             // CICD-specific flags
             if (isCICD) { //Running in CI/CD mode
-                options.addArguments("--user-data-dir=/tmp/chrome-profile-" + System.currentTimeMillis()); //user-data-dir only use for CICD, not parallel local
+                //options.addArguments("--user-data-dir=/tmp/chrome-profile-" + System.currentTimeMillis()); //user-data-dir only use for CICD, not parallel local
                 options.addArguments("--disable-gpu");// optional, nhất là trong Docker
                 options.addArguments("--no-sandbox");// optional nếu chạy CI/CD
             }
