@@ -16,6 +16,7 @@ import org.testng.annotations.*;
 import org.testng.Assert;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.Duration;
 import java.util.List;
 import java.util.Random;
 import java.text.SimpleDateFormat;
@@ -95,7 +96,7 @@ public class BaseTest extends BasePage{
         } else {
             throw new RuntimeException("Browser name is not valid!!!");
         }
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
        // Login
         openPageURL(driver, GlobalConstants.URL);

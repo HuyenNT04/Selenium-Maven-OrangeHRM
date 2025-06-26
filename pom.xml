@@ -12,7 +12,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <selenium.version>4.28.1</selenium.version>
+        <selenium.version>4.33.0</selenium.version>
         <testng.version>7.4.0</testng.version>
         <webdrivermanager.version>5.9.2</webdrivermanager.version>
         <slf4j.version>1.7.31</slf4j.version> <!-- Phiên bản SLF4J -->
@@ -33,14 +33,6 @@
             <version>${selenium.version}</version>
         </dependency>
 
-<!--        &lt;!&ndash; TestNG: Framework kiểm thử đơn vị và tích hợp, hỗ trợ chạy test với XML &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.testng</groupId>-->
-<!--            <artifactId>testng</artifactId>-->
-<!--            <version>${testng.version}</version>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
-
         <!-- WebDriverManager: Quản lý driver (như ChromeDriver) tự động, không cần tải offline -->
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
@@ -60,20 +52,6 @@
             <artifactId>slf4j-api</artifactId>
             <version>1.7.31</version>
         </dependency>
-
-        <!-- Apache POI: Đọc/ghi file Excel (.xls, .xlsx) cho kiểm thử dữ liệu -->
-        <!--        <dependency>-->
-        <!--            <groupId>org.apache.poi</groupId>-->
-        <!--            <artifactId>poi</artifactId>-->
-        <!--            <version>${poi.version}</version>-->
-        <!--        </dependency>-->
-
-        <!-- Apache POI OOXML: Hỗ trợ đọc/ghi file Excel nâng cao (.xlsx) -->
-        <!--        <dependency>-->
-        <!--            <groupId>org.apache.poi</groupId>-->
-        <!--            <artifactId>poi-ooxml</artifactId>-->
-        <!--            <version>${poi.version}</version>-->
-        <!--        </dependency>-->
 
         <!-- TestNG (sửa scope về compile để dùng trong code chính nếu cần, complie used for both main and test) -->
         <dependency>
@@ -142,6 +120,11 @@
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
             <version>5.5.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-devtools-v137</artifactId>
+            <version>${selenium.version}</version>
         </dependency>
     </dependencies>
 

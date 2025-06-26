@@ -132,7 +132,6 @@ public class JobTitles extends BaseTest {
         verifyTrue(jobTitlesPage.isJobTitleDisplayed(name2));
         //Checked
         jobTitlesPage.selectOnCheckbox(name);
-        System.out.println(name2);
         jobTitlesPage.selectOnCheckbox(name2);
         jobTitlesPage.clickToDeleteSelectedButton();
         jobTitlesPage.confirmDelete();
