@@ -24,9 +24,8 @@ import static actions.commons.GlobalConstants.uploadFolderPath;
 @Feature("Check demo Feature Job Titles")
 public class JobTitles extends BaseTest {
      private static ThreadLocal<JobTitlesPageObject> jobTitlesPageObjectThreadLocal  = new ThreadLocal<>();
-    String name, des, note, name2;
-    String specFileName = "8888.png";
-    String specFilePath = uploadFolderPath + specFileName;
+    static String specFileName = "8888.png";
+    static String specFilePath = uploadFolderPath + specFileName;
     @BeforeMethod(alwaysRun = true)
     @Description("Open Job Titles Page")
     public void beforeClass(ITestContext context) {
@@ -45,13 +44,14 @@ public class JobTitles extends BaseTest {
         verifyTrue(jobTitlesPage.isAddBtnDisplayed());
     }
 
-    @Test
+    @Test(groups = "runnow")
     @Step("JT_02_User_Create_New_Job_Title")
     public void JT_02_User_Create_New_Job_Title() {
         JobTitlesPageObject jobTitlesPage = jobTitlesPageObjectThreadLocal.get();
         //data
-        name = generateRandomName();
-        des = generateRandomName() + " check Des";
+        String name, des, note;
+        name = "create" + generateRandomName();
+        des = generateRandomName() + " create Des";
         note = generateRandomName() + " check Note";
         //Create
         jobTitlesPage.clickToAddJobTitleButton();
@@ -74,6 +74,7 @@ public class JobTitles extends BaseTest {
     public void JT_03_User_Update_Job_Title() {
         JobTitlesPageObject jobTitlesPage = jobTitlesPageObjectThreadLocal.get();
         //data
+        String name, des, name2;
         name = generateRandomName();
         des = generateRandomName() + " check Update";
         name2 = name + "Updated";
@@ -100,6 +101,7 @@ public class JobTitles extends BaseTest {
     public void JT_04_User_Delete_Job_Title() {
         JobTitlesPageObject jobTitlesPage = jobTitlesPageObjectThreadLocal.get();
         //Create
+        String name;
         name = generateRandomName();
         jobTitlesPage.clickToAddJobTitleButton();
         jobTitlesPage.enterName(name);
@@ -119,6 +121,7 @@ public class JobTitles extends BaseTest {
     public void JT_05_User_Delete_Multiple_Job_Titles() {
         JobTitlesPageObject jobTitlesPage = jobTitlesPageObjectThreadLocal.get();
         //Create
+        String name, name2;
         name = generateRandomName();
         jobTitlesPage.clickToAddJobTitleButton();
         jobTitlesPage.enterName(name);
