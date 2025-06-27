@@ -17,6 +17,9 @@
             <package name="testcases.admin.organization"></package>
             <package name="testcases.admin.job"></package>
         </packages>
+        <classes>
+            <class name="testcases.PIM.AddEmployee"/>
+        </classes>
     </test>
     <!--    <test name="Run API Testcase for Cypress site">-->
     <!--        <packages>-->
