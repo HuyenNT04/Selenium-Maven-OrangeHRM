@@ -24,6 +24,7 @@ public class Education extends BaseTest {
     EducationPageObject educationPage;
     String name, updatedName, name2;
     DBUtils dbUtils;
+    //This is TCs for DB --> use OrangHRM on local
     @BeforeClass(alwaysRun = true)
     @Description("Open Admin Page")
     public void beforeClass(ITestContext context) {
