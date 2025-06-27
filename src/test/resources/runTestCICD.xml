@@ -21,9 +21,4 @@
             <class name="testcases.PIM.AddEmployee"/>
         </classes>
     </test>
-    <!--    <test name="Run API Testcase for Cypress site">-->
-    <!--        <packages>-->
-    <!--            <package name="testcases.api.cypressApp"></package>-->
-    <!--        </packages>-->
-    <!--    </test>-->
 </suite>
