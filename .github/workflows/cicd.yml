@@ -44,26 +44,6 @@ jobs:
       # đảm bảo chạy đúng `runAllTestcases.xml` (nếu đã cấu hình trong `maven-surefire-plugin`).
       # batch mode: Giảm log không cần thiết, sạch và nhanh hơn, neu muon debug thi bo batchmode
 
-#      - name: Generate Allure Report
-#        run:  mvn allure:report -q
-#        if: always()  # run this step eventhough it is failed.
-#      #  ls -lrt; pwd; ls -lrt target/;
-
-#
-#      - name: Upload Allure Report
-#        if: always()
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: allure-report
-#          path: target/site/allure-maven-plugin/
-#
-#      - name: Upload Test Reports
-#        if: always()
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: test-reports
-#          path: target/surefire-reports/
-
       - name: 📊 Generate Allure Report
         if: always()
         run: |
@@ -89,7 +69,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./target/site/allure-maven-plugin/
-          publish_branch: gh-pages
+          #publish_branch: gh-pages
 
       - name: 🔗 Print Allure Report URL
         if: always()

@@ -23,6 +23,7 @@ public class Education extends BaseTest {
     WebDriver driver;
     EducationPageObject educationPage;
     String name, updatedName, name2;
+    DBUtils dbUtils;
     @BeforeClass(alwaysRun = true)
     @Description("Open Admin Page")
     public void beforeClass(ITestContext context) {
