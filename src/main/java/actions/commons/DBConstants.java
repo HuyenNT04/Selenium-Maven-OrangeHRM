@@ -11,7 +11,6 @@ public class DBConstants {
     public static final String SEARCH_BY_EDUCATION_NAME = "SELECT * FROM ohrm_education WHERE name = ?";
     public static final String INSERT_EDUCATION = "INSERT INTO ohrm_education (name) VALUES (?)";
     //public static final String insertEducationName = "INSERT INTO ohrm_education (name, description) VALUES (?,?)"; for many params
-
     public static final String DELETE_BY_EDUCATION_NAME = "DELETE FROM ohrm_education WHERE name = ?";
     public static final String COUNT_EDUCATION_BY_NAME = "SELECT COUNT(*) FROM ohrm_education WHERE name = ?";
 

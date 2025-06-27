@@ -2,10 +2,12 @@ package actions.pageObject.admin.qualification;
 
 import actions.commons.BasePage;
 import actions.utilities.DBUtils;
+import interfaces.pageUIs.BasePageUI;
 import interfaces.pageUIs.admin.qualification.EducationPageUI;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import static actions.commons.DBConstants.*;
+import static interfaces.pageUIs.BasePageUI.*;
 
 public class EducationPageObject extends BasePage {
     private WebDriver driver;
@@ -62,14 +64,14 @@ public class EducationPageObject extends BasePage {
         clickToElement(driver, EducationPageUI.SAVE_LEVEL_BUTTON);
     }
     public String getMainSuccessMessage() {
-        waitForElementVisible(driver, SUCCESS_TOAST);
-        waitForElementVisible(driver, SUCCESS_MAIN_TOAST);
-        return getElementText(driver, SUCCESS_MAIN_TOAST);
+        waitForElementVisible(driver, BasePageUI.SUCCESS_TOAST);
+        waitForElementVisible(driver, BasePageUI.SUCCESS_MAIN_TOAST);
+        return getElementText(driver, BasePageUI.SUCCESS_MAIN_TOAST);
     }
 
     public String getSubSuccessMessage(){
-        waitForElementVisible(driver, SUCCESS_SUB_TOAST);
-        return getElementText(driver, SUCCESS_SUB_TOAST);
+        waitForElementVisible(driver, BasePageUI.SUCCESS_SUB_TOAST);
+        return getElementText(driver, BasePageUI.SUCCESS_SUB_TOAST);
     }
     public boolean isEducationDisplayed(String name){
         try {

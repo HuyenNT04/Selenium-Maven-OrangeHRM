@@ -1,5 +1,10 @@
 package actions.commons;
 
+import actions.pageObject.PIM.AddEmployeePageObject;
+import actions.pageObject.PIM.EmployeeListPageObject;
+import actions.pageObject.PageGenerator;
+import actions.pageObject.myInfo.PersonalDetailPageObject;
+import interfaces.pageUIs.BasePageUI;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.Color;
@@ -267,6 +272,13 @@ public class BasePage {
     public String getAttributeInDOM(WebDriver driver, String locator, String attributeName) {
         return (String) ((JavascriptExecutor) driver).executeScript("return arguments[0].getAttribute('" + attributeName + "');", getWebElement(driver, locator));
     }
+    public String getValueFromDOMProperty(WebDriver driver, String locator){
+        waitForValueStableInDOM(driver, locator);
+        //Get value from element.value — is DOM property
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        String value = (String) js.executeScript("return arguments[0].value;", getWebElement(driver, locator));
+        return value;
+    }
     public String getElementValidationMessage(WebDriver driver, String locator) {
         return (String) ((JavascriptExecutor) driver).executeScript("return arguments[0].validationMessage;", getWebElement(driver, locator));
     }
@@ -307,7 +319,15 @@ public class BasePage {
     public boolean waitForElementSelected(WebDriver driver, String locator){
         return new WebDriverWait(driver, Duration.ofSeconds(LONG_TIMEOUT)).until(ExpectedConditions.elementToBeSelected(getByXpath(locator)));
     }
-
+    private boolean waitForValueStableInDOM(WebDriver driver, String locator){
+        // Đợi cho tới khi value != null và != ""
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(LONG_TIMEOUT));
+        return wait.until(d -> {
+            JavascriptExecutor js = (JavascriptExecutor) d;
+            String val = (String) js.executeScript("return arguments[0].value;", getWebElement(driver, locator));
+            return val != null && !val.trim().isEmpty();
+        });
+    }
     //Hard code
     public void sleepInSeconds(long timeInSeconds){ //hard wait
         try {
@@ -316,8 +336,45 @@ public class BasePage {
             throw new RuntimeException(e);
         }
     }
-    public static final String SUCCESS_TOAST = "//div[@class='oxd-toast-start']";
-    public static final String SUCCESS_MAIN_TOAST = "//div[@class='oxd-toast-start']/div/p[1]";
-    public static final String SUCCESS_SUB_TOAST = "//div[@class='oxd-toast-start']/div/p[2]";
     private long LONG_TIMEOUT = 30;
+
+
+    //General Verifying
+    public boolean isSuccessToastDisplayed(WebDriver driver) {
+        // Wait specifically for the success message text within the toast
+        waitForElementVisible(driver, BasePageUI.SUCCESS_TOAST);
+        return isElementDisplayed(driver, BasePageUI.SUCCESS_TOAST);
+    }
+    public String getMainSuccessMessage(WebDriver driver) {
+        waitForElementVisible(driver, BasePageUI.SUCCESS_MAIN_TOAST);
+        return getElementText(driver, BasePageUI.SUCCESS_MAIN_TOAST);
+    }
+    public String getSubSuccessMessage(WebDriver driver) {
+        waitForElementVisible(driver, BasePageUI.SUCCESS_SUB_TOAST);
+        return getElementText(driver, BasePageUI.SUCCESS_SUB_TOAST);
+    }
+
+
+    //--------------------------Open page--------------------------
+    public AddEmployeePageObject openAddEmployeePage(WebDriver driver){
+        waitForElementClickable(driver, BasePageUI.ADD_EMPLOYEE_TAB);
+        clickToElement(driver, BasePageUI.ADD_EMPLOYEE_TAB);
+        return PageGenerator.getPageInstance(AddEmployeePageObject.class, driver);
+    }
+    public EmployeeListPageObject openEmployeeListPage(WebDriver driver){
+        waitForElementClickable(driver, BasePageUI.EMPLOYEE_LIST_TAB);
+        clickToElement(driver, BasePageUI.EMPLOYEE_LIST_TAB);
+        return PageGenerator.getPageInstance(EmployeeListPageObject.class, driver);
+    }
+    public PersonalDetailPageObject PersonalDetailPageDisplaying(WebDriver driver){
+        return PageGenerator.getPageInstance(PersonalDetailPageObject.class, driver);
+    }
+//    public PersonalDetailPageObject openPersonalDetailPage(WebDriver driver){
+//        waitForElementClickable(driver, locator)
+//    }
+    public PersonalDetailPageObject openMyInforPage(WebDriver driver){
+        waitForElementClickable(driver, BasePageUI.MY_INFOR_SECTION);
+        clickToElement(driver, BasePageUI.MY_INFOR_SECTION);
+        return PageGenerator.getPageInstance(PersonalDetailPageObject.class, driver);
+    }
 }

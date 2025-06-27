@@ -1,0 +1,31 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="OrangeHRM Project" verbose="1" parallel="methods" thread-count="2">
+    <listeners>
+        <listener class-name="actions.reportConfig.AllureReportListener"/>
+    </listeners>
+    <test name="Run Add Employee Flow">
+    <parameter name="browser" value="Chrome"></parameter>
+    <parameter name="headless" value="false"/>
+    <parameter name="isCICD" value="false"/>
+<!--        <groups>-->
+<!--            <run>-->
+<!--                <include name="runnow"/>-->
+<!--            </run>-->
+<!--        </groups>-->
+        <classes>
+            <class name="testcases.PIM.AddEmployee"/>
+        </classes>
+<!--        <packages>-->
+<!--            <package name="testcases.PIM"></package>-->
+<!--        </packages>-->
+    </test>
+<!--    <test name="Run API Testcase for Cypress site">-->
+<!--        <packages>-->
+<!--            <package name="testcases.api.cypressApp"></package>-->
+<!--        </packages>-->
+<!--    </test>-->
+</suite>
+
+
+

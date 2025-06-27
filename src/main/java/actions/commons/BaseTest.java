@@ -1,8 +1,7 @@
 package actions.commons;
 
-//import actions.utilities.DBConnection;
-//import actions.utilities.DBUtils;
-//import io.restassured.response.Response;
+import actions.utilities.DBConnection;
+import actions.utilities.DBUtils;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -17,7 +16,6 @@ import org.testng.Assert;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.Duration;
-import java.util.List;
 import java.util.Random;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -31,8 +29,8 @@ public class BaseTest extends BasePage{
     protected WebDriver getDriver(){
         return driverThreadLocal.get();
     }
-//    protected Connection connection;
-//    protected DBUtils dbUtils;
+    protected Connection connection;
+    protected DBUtils dbUtils;
 
     //----------------------Annotations for Testcases----------------------------
 
@@ -98,7 +96,7 @@ public class BaseTest extends BasePage{
         }
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
-       // Login
+        //Login
         openPageURL(driver, GlobalConstants.URL);
         waitForElementVisible(driver,"//input[@name='username']");
         sendkeyToElement(driver,"//input[@name='username']",ADMIN_USERNAME);

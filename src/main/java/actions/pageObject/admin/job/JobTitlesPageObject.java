@@ -1,6 +1,7 @@
 package actions.pageObject.admin.job;
 
 import actions.commons.BasePage;
+import interfaces.pageUIs.BasePageUI;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import interfaces.pageUIs.admin.job.JobTitlesPageUI;
@@ -89,14 +90,14 @@ public class JobTitlesPageObject extends BasePage {
     }
 
     public String getMainSuccessMessage() {
-        waitForElementVisible(driver, SUCCESS_TOAST);
-        waitForElementVisible(driver, SUCCESS_MAIN_TOAST);
-        return getElementText(driver, SUCCESS_MAIN_TOAST);
+        waitForElementVisible(driver, BasePageUI.SUCCESS_TOAST);
+        waitForElementVisible(driver, BasePageUI.SUCCESS_MAIN_TOAST);
+        return getElementText(driver, BasePageUI.SUCCESS_MAIN_TOAST);
     }
 
     public String getSubSuccessMessage(){
-        waitForElementVisible(driver, SUCCESS_SUB_TOAST);
-        return getElementText(driver, SUCCESS_SUB_TOAST);
+        waitForElementVisible(driver, BasePageUI.SUCCESS_SUB_TOAST);
+        return getElementText(driver, BasePageUI.SUCCESS_SUB_TOAST);
     }
 
     public String getJobTitlesLabel() {
