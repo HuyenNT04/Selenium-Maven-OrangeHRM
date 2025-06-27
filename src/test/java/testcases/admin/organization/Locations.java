@@ -18,39 +18,36 @@ import org.testng.annotations.Test;
 @Epic("Check Location")
 @Feature("Check demo Feature Location")
 public class Locations extends BaseTest {
-    WebDriver driver;
-    LocationsPageObject locationsPage;
-    String name, name2;
-    String city = "HaNoi" + getRandomNumber();
-    String country = "Viet Nam";
-    String city2 = "update" + getRandomNumber();
-    String country2 = "Algeria";
-    private String[] createdLocationInfo;
+    private static ThreadLocal<LocationsPageObject> locationsPageThreadLocal = new ThreadLocal<>();
+    //private String[] createdLocationInfo;
 
-    @BeforeClass(alwaysRun = true)
+    @BeforeMethod(alwaysRun = true)
     @Description("Open Location Page")
     public void beforeClass(ITestContext context){
-//        driver = (WebDriver) context.getAttribute("WebDriver"); // Lấy driver từ Context
-        driver = getDriver();
-        locationsPage = new LocationsPageObject(driver);
-        locationsPage.clickToAdminSection();
-    }
-    @BeforeMethod(alwaysRun = true)
-    @Description("For independent Testcases")
-    public void beforeTestcases(){
-        locationsPage.clickToOrganization();
-        locationsPage.clickToLocationOption();
+        WebDriver currentDriver = getDriver();
+        LocationsPageObject page = new LocationsPageObject(currentDriver);
+        page.clickToAdminSection();
+        page.clickToOrganization();
+        page.clickToLocationOption();
+        locationsPageThreadLocal.set(page);
     }
 
     @Test
     @Step("Check UI")
     public void LO_01_CheckUI(){
+        LocationsPageObject locationsPage = locationsPageThreadLocal.get();
         verifyEquals(locationsPage.getLabel(),"Locations");
         verifyTrue(locationsPage.isAddButtonDisplayed());
     }
     @Test()
     @Step("Create a new Location")
     public void LO_02_CreateNewLocation(){
+        LocationsPageObject locationsPage = locationsPageThreadLocal.get();
+        //data
+        String name, city, country;
+        city = "HaNoi" + getRandomNumber();
+        country = "Viet Nam";
+        //Add new
         locationsPage.clickToAddBtn();
         name = generateRandomName();
         locationsPage.addName(name);
@@ -60,35 +57,83 @@ public class Locations extends BaseTest {
         verifyEquals(locationsPage.getMainSuccessMessage(),"Success");
         verifyEquals(locationsPage.getSubSuccessMessage(),"Successfully Saved");
         verifyEquals(locationsPage.getLabel(),"Locations");
-        createdLocationInfo = new String[]{name, city, country};
+        //createdLocationInfo = new String[]{name, city, country};
     }
-    @Test(dependsOnMethods = "LO_02_CreateNewLocation")
+    @Test()
     @Step("Search by Name")
     public void LO_03_SearchByName() {
-        locationsPage.enterName(createdLocationInfo[0]);
+        LocationsPageObject locationsPage = locationsPageThreadLocal.get();
+        //Create data
+        String name, city, country;
+        city = "HaNoi" + getRandomNumber();
+        country = "Viet Nam";
+        //Add new
+        locationsPage.clickToAddBtn();
+        name = generateRandomName();
+        locationsPage.addName(name);
+        locationsPage.addCity(city);
+        locationsPage.addCountry(country);
+        locationsPage.clickToSaveBtn();
+        verifyEquals(locationsPage.getLabel(),"Locations");
+        //Verify
+        locationsPage.enterName(name);
         locationsPage.clickToSearchBtn();
-        verifyTrue(locationsPage.isNameSearchContained(createdLocationInfo[0]));
+        verifyTrue(locationsPage.isNameSearchContained(name));
     }
-    @Test(dependsOnMethods = "LO_02_CreateNewLocation")
+    @Test()
     @Step("Search by City")
     public void LO_04_SearchByCity(){
-        locationsPage.enterCity(createdLocationInfo[1]);
+        LocationsPageObject locationsPage = locationsPageThreadLocal.get();
+        //Create data
+        String name, city, country;
+        city = "HaNoi" + getRandomNumber();
+        country = "Viet Nam";
+        //Add new
+        locationsPage.clickToAddBtn();
+        name = generateRandomName();
+        locationsPage.addName(name);
+        locationsPage.addCity(city);
+        locationsPage.addCountry(country);
+        locationsPage.clickToSaveBtn();
+        verifyEquals(locationsPage.getLabel(),"Locations");
+        //Verify
+        locationsPage.enterCity(city);
         locationsPage.clickToSearchBtn();
-        verifyTrue(locationsPage.isCitySearchContained(createdLocationInfo[1]));
+        verifyTrue(locationsPage.isCitySearchContained(city));
     }
 
-    @Test(dependsOnMethods = "LO_02_CreateNewLocation")
+    @Test()
     @Step("Search by Country")
     public void LO_05_SearchByCountry(){
-        locationsPage.selectCountry(createdLocationInfo[2]);
+        LocationsPageObject locationsPage = locationsPageThreadLocal.get();
+        //Create data
+        String name, city, country;
+        city = "HaNoi" + getRandomNumber();
+        country = "Viet Nam";
+        //Add new
+        locationsPage.clickToAddBtn();
+        name = generateRandomName();
+        locationsPage.addName(name);
+        locationsPage.addCity(city);
+        locationsPage.addCountry(country);
+        locationsPage.clickToSaveBtn();
+        verifyEquals(locationsPage.getLabel(),"Locations");
+        //Verify
+        locationsPage.selectCountry(country);
         locationsPage.clickToSearchBtn();
-        verifyTrue(locationsPage.isCountrySearchContained(createdLocationInfo[2]));
+        verifyTrue(locationsPage.isCountrySearchContained(country));
     }
 
     @Test
     @Step("Update an existing name")
     public void LO_06_UpdateLocation(){
-        // 🛠 Create data
+        LocationsPageObject locationsPage = locationsPageThreadLocal.get();
+        String name, name2, city, country, city2, country2;
+        city = "HaNoi" + getRandomNumber();
+        country = "Viet Nam";
+        city2 = "update" + getRandomNumber();
+        country2 = "Algeria";
+        // 🛠 Create
         locationsPage.clickToAddBtn();
         name = generateRandomName();
         locationsPage.addName(name);
@@ -134,9 +179,13 @@ public class Locations extends BaseTest {
     @Test
     @Step("Create and Delete a single location")
     public void LO_07_DeleteSingleLocation() {
+        LocationsPageObject locationsPage = locationsPageThreadLocal.get();
+        String name, city, country;
+        city = "HaNoi" + getRandomNumber();
+        country = "Viet Nam";
         // 🛠 Create data
         locationsPage.clickToAddBtn();
-        name = generateRandomName();
+        name = "nameToDelete1" + generateRandomName();
         locationsPage.addName(name);
         locationsPage.addCity(city);
         locationsPage.addCountry(country);
@@ -161,12 +210,18 @@ public class Locations extends BaseTest {
         verifyFalse(locationsPage.isNameSearchContained(name));
     }
 
-    @Test(groups = {"runnow"})
+    @Test(groups = "runnow")
     @Step("Create and Delete multiple locations")
     public void LO_08_DeleteMultipleLocations() {
+        LocationsPageObject locationsPage = locationsPageThreadLocal.get();
+        String name, name2, city, country, city2, country2;
+        city = "HaNoi" + getRandomNumber();
+        country = "Viet Nam";
+        city2 = "update" + getRandomNumber();
+        country2 = "Algeria";
         // 🛠 Create data
         locationsPage.clickToAddBtn();
-        name = generateRandomName();
+        name = "name1" + generateRandomName();
         locationsPage.addName(name);
         locationsPage.addCity(city);
         locationsPage.addCountry(country);
@@ -174,7 +229,7 @@ public class Locations extends BaseTest {
 
         verifyEquals(locationsPage.getLabel(),"Locations");
         locationsPage.clickToAddBtn();
-        name2 = generateRandomName();
+        name2 = "name2" + generateRandomName();
         locationsPage.addName(name2);
         locationsPage.addCity(city2);
         locationsPage.addCountry(country2);

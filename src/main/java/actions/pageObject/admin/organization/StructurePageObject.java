@@ -73,20 +73,30 @@ public class StructurePageObject extends BasePage {
         waitForElementVisible(driver, StructurePageUI.SUCCESS_SUB_TOAST);
         return getElementText(driver, StructurePageUI.SUCCESS_SUB_TOAST);
     }
-
-    public boolean isOrganizationUnitDisplayed(String unitName){
-        waitForElementVisible(driver, getDynamicLocator(StructurePageUI.UNIT, unitName));
-        if(isElementDisplayed(driver, getDynamicLocator(StructurePageUI.UNIT, unitName))) {
-            return true;
+    public boolean isOrganizationUnitDisplayed(String unitName) {
+        try {
+            waitForElementVisible(driver, getDynamicLocator(StructurePageUI.UNIT, unitName));
+            if (isElementDisplayed(driver, getDynamicLocator(StructurePageUI.UNIT, unitName))) {
+                return true;
+            }
+        } catch (Exception e) {
+            System.out.println("Element with unit name '" + unitName + "' not found. Error: " + e.getMessage());
         }
         return false;
     }
-    public boolean isOrganizationUnitNotDisplayed(String unitName){
-        if(!isElementDisplayed(driver, getDynamicLocator(StructurePageUI.UNIT, unitName))) {
-            return true;
-        }
-        return false;
-    }
+//    public boolean isOrganizationUnitDisplayed(String unitName){
+//        try(isElementDisplayed(driver, getDynamicLocator(StructurePageUI.UNIT, unitName))) {
+//            waitForElementVisible(driver, getDynamicLocator(StructurePageUI.UNIT, unitName));
+//            return true;
+//        }
+//        return false;
+//    }
+//    public boolean isOrganizationUnitNotDisplayed(String unitName){
+//        if(!isElementDisplayed(driver, getDynamicLocator(StructurePageUI.UNIT, unitName))) {
+//            return true;
+//        }
+//        return false;
+//    }
 
     public void clickToDeleteIcon(String unitName) {
         waitForElementClickable(driver, getDynamicLocator(StructurePageUI.DELETE_ICON, unitName));

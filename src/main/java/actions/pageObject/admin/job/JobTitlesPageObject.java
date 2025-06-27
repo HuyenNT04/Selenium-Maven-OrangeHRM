@@ -54,11 +54,15 @@ public class JobTitlesPageObject extends BasePage {
     }
 
     public boolean isJobTitleDisplayed(String jobTitle) {
-        try {
-            return isElementDisplayed(driver, getDynamicLocator(JobTitlesPageUI.JOB_TITLE_NAME, jobTitle));
-        } catch (NoSuchElementException e) {
+            try {
+                waitForElementVisible(driver, getDynamicLocator(JobTitlesPageUI.JOB_TITLE_NAME, jobTitle));
+                if(isElementDisplayed(driver,getDynamicLocator(JobTitlesPageUI.JOB_TITLE_NAME, jobTitle))){
+                    return true;
+                }
+            }catch (Exception e) {
+                System.out.println("Job title not displayed: " + jobTitle + " | Error: " + e.getMessage());
+            }
             return false;
-        }
     }
 
     public boolean isJobDescriptionDisplayed(String des) {
