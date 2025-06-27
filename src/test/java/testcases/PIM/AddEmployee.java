@@ -152,18 +152,18 @@ public class AddEmployee extends BaseTest {
         addEmployeePage.enterEmployeeID(employeeId);
         addEmployeePage.clickSaveButton();
         //Detail page is displaying
-        PersonalDetailPageObject personalDetailPage = addEmployeePage.PersonalDetailPageDisplaying(getDriver());
+        PersonalDetailPageObject personalDetailPage = PersonalDetailPageDisplaying(getDriver());
         verifyEquals(personalDetailPage.getMainTitle(), "Personal Details");
 
         //Check displaying in Listing page
-        EmployeeListPageObject employeeListPage = personalDetailPage.openEmployeeListPage(getDriver());
+        EmployeeListPageObject employeeListPage = openEmployeeListPage(getDriver());
         employeeListPage.enterEmployeeId(employeeId);
         employeeListPage.clickToSearchBtn();
         verifyTrue(employeeListPage.isEmployeeDisplay(employeeId, firstName, middleName, lastName));
         employeeListPage.clickToEditIcon(employeeId);
 
         //Check right information from Detail page
-        personalDetailPage = employeeListPage.PersonalDetailPageDisplaying(getDriver());
+        personalDetailPage = PersonalDetailPageDisplaying(getDriver());
         verifyEquals(personalDetailPage.getMainTitle(), "Personal Details");
         verifyEquals(personalDetailPage.getFirstName(), firstName);
         verifyEquals(personalDetailPage.getMiddleName(), middleName);
