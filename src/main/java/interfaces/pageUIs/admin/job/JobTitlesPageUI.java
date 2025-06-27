@@ -13,7 +13,7 @@ public class JobTitlesPageUI {
     public static final String JOB_UPLOAD_FILE = "//input[@type='file']";
     public static final String JOB_NOTE = "//textarea[@placeholder='Add note']";
     public static final String SAVE_JOB_TITLE_BUTTON = "//button[text()=' Save ']";
-    public static final String JOB_TITLE_NAME = "//div[text()='%s']";
+    public static final String JOB_TITLE_NAME = "//div[@class='oxd-table-card']//div[@class='oxd-table-cell oxd-padding-cell']//div[normalize-space()='%s']";
     public static final String JOB_DESCRIPTION = "//span[text()='%s']";
     public static final String EDIT_JOB_TITLES_BUTTON = "//div[text()='%s']//ancestor::div[@role='row']//button[i[contains(@class, 'bi-pencil-fill')]]/i";
     public static final String DELETE_JOB_TITLE_BUTTON = "//div[text()='%s']//ancestor::div[@role='row']//button[i[contains(@class, 'bi-trash')]]/i";

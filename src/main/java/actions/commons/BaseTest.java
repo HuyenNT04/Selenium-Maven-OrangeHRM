@@ -3,7 +3,6 @@ package actions.commons;
 import actions.utilities.DBConnection;
 import actions.utilities.DBUtils;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import io.restassured.response.Response;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -16,6 +15,7 @@ import org.testng.annotations.*;
 import org.testng.Assert;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.Duration;
 import java.util.Random;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -36,12 +36,12 @@ public class BaseTest extends BasePage{
 
     @BeforeMethod(alwaysRun = true)
     @Parameters({"browser", "headless", "isCICD"})
-    public void setUp(String browserName, @Optional("false") boolean headless,@Optional("false") String isCICD, ITestContext context) throws SQLException {
+    public void setUp(String browserName, @Optional("false") boolean headless,@Optional("false") Boolean isCICD, ITestContext context) throws SQLException {
 //        try {
 //            connection = DBConnection.getConnection();
 //            dbUtils = new DBUtils(connection); // Khởi tạo DBUtils với kết nối hiện tại
-            boolean isCI = Boolean.parseBoolean(isCICD); //do o file xml gia tri truyen vao dang la string, nen phai parse qua Boolean
-            WebDriver driver = openBrowser(browserName, headless, isCI);
+            //boolean isCI = Boolean.parseBoolean(isCICD); //do o file xml gia tri truyen vao dang la string, nen phai parse qua Boolean
+            WebDriver driver = openBrowser(browserName, headless, isCICD);
             driverThreadLocal.set(driver);
             context.setAttribute("WebDriver", driver); // save Driver into Context to report
 //        } catch (SQLException e) {
@@ -63,17 +63,18 @@ public class BaseTest extends BasePage{
         if (browserName.equalsIgnoreCase("Chrome")) {
             ChromeOptions options = new ChromeOptions();
             if (headless) {
-                options.addArguments("--headless=new"); // run in Headless mode
+                options.addArguments("--headless");// run in Headless mode
             }
-
+            options.addArguments("--window-size=1920,1080");
+            options.addArguments("--start-maximized");
+            options.addArguments("--disable-dev-shm-usage");
+            options.addArguments("--ignore-certificate-errors");
             // CICD-specific flags
             if (isCICD) { //Running in CI/CD mode
-                options.addArguments("--user-data-dir=/tmp/chrome-profile-" + System.currentTimeMillis()); //user-data-dir only use for CICD, not parallel local
-                options.addArguments("--disable-gpu");
-                options.addArguments("--no-sandbox");
-                options.addArguments("--window-size=1920,1080");
-            } // size of screen
-
+                //options.addArguments("--user-data-dir=/tmp/chrome-profile-" + System.currentTimeMillis()); //user-data-dir only use for CICD, not parallel local
+                options.addArguments("--disable-gpu");// optional, nhất là trong Docker
+                options.addArguments("--no-sandbox");// optional nếu chạy CI/CD
+            }
             driver = new ChromeDriver(options);
 
         } else if (browserName.equalsIgnoreCase("Edge")) {
@@ -93,12 +94,9 @@ public class BaseTest extends BasePage{
         } else {
             throw new RuntimeException("Browser name is not valid!!!");
         }
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        driver.manage().window().maximize();
-
-
-       // Login
+        //Login
         openPageURL(driver, GlobalConstants.URL);
         waitForElementVisible(driver,"//input[@name='username']");
         sendkeyToElement(driver,"//input[@name='username']",ADMIN_USERNAME);
@@ -106,8 +104,7 @@ public class BaseTest extends BasePage{
         sendkeyToElement(driver,"//input[@name='password']",ADMIN_PASSWORD);
         clickToElement(driver,"//button[@type='submit']");
 
-
-//        //API
+//        //For API Testing
 //        Response response = given()
 //                .baseUri(baseUrl) //URL goc cho API Request
 //                .header("accept","application/json")
@@ -117,7 +114,6 @@ public class BaseTest extends BasePage{
 //        String sessionCookie  = response.getCookie("orangehrm");
 //        System.out.println("Cookie = " + sessionCookie );
 //        cookie  = sessionCookie;
-
 
           //For testing DataBase
 //        openPageURL(driver, GlobalConstants.URL_TEST);
@@ -155,7 +151,4 @@ public class BaseTest extends BasePage{
     public String generateRandomName(){
         return "check" + getRandomNumber();
     }
-
-
-
 }

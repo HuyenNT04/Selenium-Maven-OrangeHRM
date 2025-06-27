@@ -23,40 +23,37 @@ import static actions.commons.GlobalConstants.uploadFolderPath;
 @Epic("Check Job Titles")
 @Feature("Check demo Feature Job Titles")
 public class JobTitles extends BaseTest {
-    WebDriver driver;
-    JobTitlesPageObject jobTitlesPage;
-    String name, des, note, name2;
-    String specFileName = "8888.png";
-    String specFilePath = uploadFolderPath + specFileName;
-
-    @BeforeClass(alwaysRun = true)
+     private static ThreadLocal<JobTitlesPageObject> jobTitlesPageObjectThreadLocal  = new ThreadLocal<>();
+    static String specFileName = "8888.png";
+    static String specFilePath = uploadFolderPath + specFileName;
+    @BeforeMethod(alwaysRun = true)
     @Description("Open Job Titles Page")
     public void beforeClass(ITestContext context) {
-//        driver = (WebDriver) context.getAttribute("WebDriver"); // get driver from Context
-        driver = getDriver();
-        jobTitlesPage = new JobTitlesPageObject(driver);
-        jobTitlesPage.clickToAdminMenu();
-    }
-
-    @BeforeMethod(alwaysRun = true)
-    @Description("For independent Testcases")
-    public void beforeTestcases(){
-        jobTitlesPage.clickToJobMenu();
-        jobTitlesPage.clickToJobTitlesMenu();
+        WebDriver currentDriver = getDriver();
+        JobTitlesPageObject page = new JobTitlesPageObject(currentDriver);
+        page.clickToAdminMenu();
+        page.clickToJobMenu();
+        page.clickToJobTitlesMenu();
+        jobTitlesPageObjectThreadLocal.set(page);
     }
     @Test
     @Step("JT_01_CheckUI")
     public void JT_01_CheckUI() {
+        JobTitlesPageObject jobTitlesPage = jobTitlesPageObjectThreadLocal.get();
         verifyEquals(jobTitlesPage.getJobTitlesLabel(),"Job Titles");
         verifyTrue(jobTitlesPage.isAddBtnDisplayed());
     }
 
-    @Test
+    @Test(groups = "runnow")
     @Step("JT_02_User_Create_New_Job_Title")
     public void JT_02_User_Create_New_Job_Title() {
-        name = generateRandomName();
-        des = generateRandomName() + " check Des";
+        JobTitlesPageObject jobTitlesPage = jobTitlesPageObjectThreadLocal.get();
+        //data
+        String name, des, note;
+        name = "create" + generateRandomName();
+        des = generateRandomName() + " create Des";
         note = generateRandomName() + " check Note";
+        //Create
         jobTitlesPage.clickToAddJobTitleButton();
         verifyEquals(jobTitlesPage.getAddJobTitlesLabel(), "Add Job Title");
         jobTitlesPage.enterName(name);
@@ -75,14 +72,17 @@ public class JobTitles extends BaseTest {
     @Test
     @Step("JT_03_User_Update_Job_Title")
     public void JT_03_User_Update_Job_Title() {
+        JobTitlesPageObject jobTitlesPage = jobTitlesPageObjectThreadLocal.get();
+        //data
+        String name, des, name2;
         name = generateRandomName();
         des = generateRandomName() + " check Update";
         name2 = name + "Updated";
+        //Add
         jobTitlesPage.clickToAddJobTitleButton();
         jobTitlesPage.enterName(name);
         jobTitlesPage.clickToSaveJobTitleButton();
         verifyTrue(jobTitlesPage.isJobTitleDisplayed(name));
-
         // Edit
         jobTitlesPage.clickToEditJobTitle(name);
         jobTitlesPage.enterName(name2);
@@ -99,7 +99,9 @@ public class JobTitles extends BaseTest {
     @Test
     @Step("JT_04_User_Delete_Job_Title")
     public void JT_04_User_Delete_Job_Title() {
+        JobTitlesPageObject jobTitlesPage = jobTitlesPageObjectThreadLocal.get();
         //Create
+        String name;
         name = generateRandomName();
         jobTitlesPage.clickToAddJobTitleButton();
         jobTitlesPage.enterName(name);
@@ -117,7 +119,9 @@ public class JobTitles extends BaseTest {
     @Test
     @Step("JT_05_User_Delete_Multiple_Job_Titles")
     public void JT_05_User_Delete_Multiple_Job_Titles() {
-        //Create data
+        JobTitlesPageObject jobTitlesPage = jobTitlesPageObjectThreadLocal.get();
+        //Create
+        String name, name2;
         name = generateRandomName();
         jobTitlesPage.clickToAddJobTitleButton();
         jobTitlesPage.enterName(name);
@@ -129,14 +133,11 @@ public class JobTitles extends BaseTest {
         jobTitlesPage.enterName(name2);
         jobTitlesPage.clickToSaveJobTitleButton();
         verifyTrue(jobTitlesPage.isJobTitleDisplayed(name2));
-
         //Checked
         jobTitlesPage.selectOnCheckbox(name);
-        System.out.println(name2);
         jobTitlesPage.selectOnCheckbox(name2);
         jobTitlesPage.clickToDeleteSelectedButton();
         jobTitlesPage.confirmDelete();
-
         //Verify
         verifyFalse(jobTitlesPage.isJobTitleDisplayed(name));
         verifyFalse(jobTitlesPage.isJobTitleDisplayed(name2));
