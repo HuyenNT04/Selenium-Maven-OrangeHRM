@@ -1,1 +1,0 @@
-AE_07_Check_Updated_in_List_will_reflect_to_detail_page failed and screenshot taken!
