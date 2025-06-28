@@ -56,6 +56,7 @@ public class AddEmployeePageObject extends BasePage{
 
     public void clickCreateLoginDetailsToggle() {
         waitForElementClickable(driver, AddEmployeePageUI.CREATE_LOGIN_DETAILS_TOGGLE);
+        waitForElementVisible(driver, AddEmployeePageUI.CREATE_LOGIN_DETAILS_TOGGLE);
         clickToElement(driver, AddEmployeePageUI.CREATE_LOGIN_DETAILS_TOGGLE);
     }
 
@@ -76,6 +77,7 @@ public class AddEmployeePageObject extends BasePage{
 
     public void clickSaveButton() {
         waitForElementClickable(driver, AddEmployeePageUI.SAVE_BUTTON);
+        waitForElementVisible(driver, AddEmployeePageUI.SAVE_BUTTON);
         clickToElement(driver, AddEmployeePageUI.SAVE_BUTTON);
         // Wait for potential loading spinner to disappear if applicable
         //waitForLoadingIconToDisappear(); // Assuming BasePage has this
