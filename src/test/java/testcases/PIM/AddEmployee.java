@@ -163,12 +163,12 @@ public class AddEmployee extends BaseTest {
         employeeListPage.clickToEditIcon(employeeId);
 
         //Check right information from Detail page
-        personalDetailPage = PersonalDetailPageDisplaying(getDriver());
-        verifyEquals(personalDetailPage.getMainTitle(), "Personal Details");
-        verifyEquals(personalDetailPage.getFirstName(), firstName);
-        verifyEquals(personalDetailPage.getMiddleName(), middleName);
-        verifyEquals(personalDetailPage.getLastName(), lastName);
-        verifyEquals(personalDetailPage.getEmployeeId(), employeeId);
+        PersonalDetailPageObject personalDetailPageEdit = PersonalDetailPageDisplaying(getDriver());
+        verifyEquals(personalDetailPageEdit.getMainTitle(), "Personal Details");
+        verifyEquals(personalDetailPageEdit.getFirstName(), firstName);
+        verifyEquals(personalDetailPageEdit.getMiddleName(), middleName);
+        verifyEquals(personalDetailPageEdit.getLastName(), lastName);
+        verifyEquals(personalDetailPageEdit.getEmployeeId(), employeeId);
     }
     @Test
     @Step("AE_07_Check_Updated_in_List will reflect to detail page")
@@ -202,13 +202,13 @@ public class AddEmployee extends BaseTest {
         verifyTrue(employeeListPage.isEmployeeDisplay(employeeId, firstName, middleName, lastName));
         employeeListPage.clickToEditIcon(employeeId);
 
-        personalDetailPage = PersonalDetailPageDisplaying(getDriver());
-        verifyEquals(personalDetailPage.getMainTitle(), "Personal Details");
-        personalDetailPage.editFirstName(updatedFirstName);
-        personalDetailPage.editMiddleName(updatedMiddleName);
-        personalDetailPage.editLastName(updatedLastName);
-        personalDetailPage.editEmployeeId(updatedEmployeeId);
-        personalDetailPage.clickToSaveButton();
+        PersonalDetailPageObject personalDetailPageVerify = PersonalDetailPageDisplaying(getDriver());
+        verifyEquals(personalDetailPageVerify.getMainTitle(), "Personal Details");
+        personalDetailPageVerify.editFirstName(updatedFirstName);
+        personalDetailPageVerify.editMiddleName(updatedMiddleName);
+        personalDetailPageVerify.editLastName(updatedLastName);
+        personalDetailPageVerify.editEmployeeId(updatedEmployeeId);
+        personalDetailPageVerify.clickToSaveButton();
         verifyEquals(getSubSuccessMessage(getDriver()),"Successfully Updated");
 
         //Verify in detail page
@@ -218,15 +218,15 @@ public class AddEmployee extends BaseTest {
         verifyEquals(personalDetailPage.getEmployeeId(), updatedEmployeeId);
 
         //Verify in Listing
-        employeeListPage = openEmployeeListPage(getDriver());
+        EmployeeListPageObject employeeListPageVerify = openEmployeeListPage(getDriver());
         ///Check displaying editted data
-        employeeListPage.enterEmployeeId(updatedEmployeeId);
-        employeeListPage.clickToSearchBtn();
-        verifyTrue(employeeListPage.isEmployeeDisplay(updatedEmployeeId, updatedFirstName, updatedMiddleName, updatedLastName));
+        employeeListPageVerify.enterEmployeeId(updatedEmployeeId);
+        employeeListPageVerify.clickToSearchBtn();
+        verifyTrue(employeeListPageVerify.isEmployeeDisplay(updatedEmployeeId, updatedFirstName, updatedMiddleName, updatedLastName));
         ///Check disappearing old data
-        employeeListPage.enterEmployeeId(employeeId);
-        employeeListPage.clickToSearchBtn();
-        verifyFalse(employeeListPage.isEmployeeDisplay(employeeId, firstName, middleName, lastName));
+        employeeListPageVerify.enterEmployeeId(employeeId);
+        employeeListPageVerify.clickToSearchBtn();
+        verifyFalse(employeeListPageVerify.isEmployeeDisplay(employeeId, firstName, middleName, lastName));
     }
     @Test(groups = "runnow")
     @Step("AE_08_Check_Updated_in_Detail_page_reflect_to_listing_page")
